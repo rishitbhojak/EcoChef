@@ -29,6 +29,52 @@ class HomeView(View):
     def get(self, request):
         return render(request, 'appecochef/new_index.html')
 
+@login_required
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'Logged out successfully.')
+    return redirect('home')
+
+
+def nu_counter(calories):
+    try:
+        # Ensure calories is a float
+        calories = float(calories)
+    except ValueError:
+        raise ValueError("Calories must be a number.")
+
+    serving_size = random.randint(1, 3)
+    carb_calories = calories * 0.55  
+    protein_calories = calories * 0.15  
+    fat_calories = calories * 0.30 
+    carbohydrate_content = round(carb_calories / 4, 2)
+    protein_content = round(protein_calories / 4, 2)
+    fat_content = round(fat_calories / 9, 2)
+    fiber_content = round((calories * 0.05) / 2, 2)
+    cholesterol_content = round(20 * serving_size, 2)
+    saturated_fat_content = round(fat_content * 0.3, 2)
+    sodium_content = round(300 * serving_size, 2)
+    sugar_content = round(carbohydrate_content * 0.1, 2)
+    trans_fat_content = round(fat_content * 0.01, 2)
+    unsaturated_fat_content = round(fat_content - saturated_fat_content - trans_fat_content, 2)
+
+    context = {
+        'calories': int(calories),
+        'serving_size': serving_size,
+        'carbohydrate_content': carbohydrate_content,
+        'protein_content': protein_content,
+        'fat_content': fat_content,
+        'fiber_content': fiber_content,
+        'cholesterol_content': cholesterol_content,
+        'saturated_fat_content': saturated_fat_content,
+        'sodium_content': sodium_content,
+        'sugar_content': sugar_content,
+        'trans_fat_content': trans_fat_content,
+        'unsaturated_fat_content': unsaturated_fat_content,
+    }
+
+    return context
+
 @csrf_exempt
 def screen4(request):
     if request.method == 'POST':
