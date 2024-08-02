@@ -75,6 +75,25 @@ def nu_counter(calories):
 
     return context
 
+def generate_image_urls(title):
+    model = 'txt2img'  
+    input_data = {
+        'prompt': title,
+        'negprompt': 'deformed, bad anatomy, disfigured, poorly drawn face',
+        'samples': 2,
+        'steps': 50,
+        'aspect_ratio': 'square',
+        'guidance_scale': 7.5,
+        'seed': 2414,
+    }
+
+    try:
+        result = monster_client.generate(model, input_data)
+        return result['output']
+    except Exception as e:
+        print(f"Error generating image: {e}")
+        return None
+
 @csrf_exempt
 def screen4(request):
     if request.method == 'POST':
@@ -134,4 +153,9 @@ def screen4(request):
     
     return render(request, 'appecochef/screen4.html')
 
-
+def try_now_view(request):
+    if request.user.is_authenticated:
+        return redirect('screen1')
+    else:
+        messages.info(request, 'You need to log in to access this feature.')
+        return redirect('login')
