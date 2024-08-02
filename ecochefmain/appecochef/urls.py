@@ -10,8 +10,7 @@ urlpatterns = [
     path('screen2/', views.screen2, name='screen2'),
     path('screen4/', views.screen4, name='screen4'),
     path('logout/', views.logout_view, name='logout'),
-
-    
+    path('try-now/', views.try_now_view, name='try_now'),
 ]
 
 
