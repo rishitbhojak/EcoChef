@@ -134,6 +134,40 @@ def generate_image_urls(title):
         return None
 
 @csrf_exempt
+def screen1(request):
+    if request.method == 'POST':
+        ingredients = request.POST.get('ingredients')
+        request.session['ingredients'] = ingredients
+        return redirect('screen2')
+    return render(request, 'appecochef/screen1.html')
+
+@csrf_exempt
+def screen2(request):
+    if request.method == 'POST':
+        cuisine = request.POST.get('cuisine')
+        meal = request.POST.get('meal')
+        time = request.POST.get('time')
+        spice_level = request.POST.get('spice_level') 
+        request.session['cuisine'] = cuisine
+        request.session['meal'] = meal
+        request.session['time'] = time
+        request.session['spice_level'] = spice_level  
+        return redirect('screen3')
+    return render(request, 'appecochef/screen2.html')
+
+@csrf_exempt
+def screen3(request):
+    if request.method == 'POST':
+        dietary_preference = request.POST.get('dietary_preference')  
+        allergies = request.POST.get('allergies')
+        nutrition_goals = request.POST.get('nutrition_goals')  
+        request.session['dietary_preference'] = dietary_preference  
+        request.session['allergies'] = allergies
+        request.session['nutrition_goals'] = nutrition_goals  
+        return redirect('screen4')
+    return render(request, 'appecochef/screen3.html')
+
+@csrf_exempt
 def screen4(request):
     if request.method == 'POST':
         notes = request.POST.get('notes')
