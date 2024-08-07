@@ -28,7 +28,46 @@ User = get_user_model()
 class HomeView(View):
     def get(self, request):
         return render(request, 'appecochef/new_index.html')
+class SignupView(View):
+    def get(self, request):
+        return render(request, 'appecochef/signup_page.html')
 
+    def post(self, request):
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+        if password == confirm_password:
+            try:
+                user = User.objects.create_user(username=email, email=email, password=password)
+                user.save()
+                messages.success(request, 'Account created successfully.')
+                return redirect('login')
+            except:
+                messages.error(request, 'Error creating account. Try again.')
+        else:
+            messages.error(request, 'Passwords do not match.')
+
+        return render(request, 'appecochef/signup_page.html')
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'appecochef/login_page.html')
+
+    def post(self, request):
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Logged in successfully.')
+            return render(request, 'appecochef/new_index.html')
+        else:
+            messages.error(request, 'Invalid credentials.')
+
+        return render(request, 'appecochef/login_page.html')
+    
 @login_required
 def logout_view(request):
     logout(request)
